@@ -1,0 +1,6 @@
+SELECT EXTRACT(HOUR FROM DATETIME) AS HOUR, 
+       count(1) as COUNT
+from ANIMAL_OUTS
+where EXTRACT(HOUR from DATETIME) between 9 and 19
+group by EXTRACT(HOUR from DATETIME)
+order by HOUR;
