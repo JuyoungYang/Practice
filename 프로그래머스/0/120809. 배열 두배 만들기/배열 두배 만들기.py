@@ -1,5 +1,5 @@
-def double(x):
-    return x * 2
-
 def solution(numbers):
-    return list(map(double, numbers))
+    result = []
+    for arr in numbers:
+        result.append(arr * 2)  
+    return result
