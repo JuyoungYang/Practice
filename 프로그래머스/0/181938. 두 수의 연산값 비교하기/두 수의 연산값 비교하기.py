@@ -1,4 +1,3 @@
 def solution(a, b):
-    ab = int(str(a) + str(b)) 
-    product = 2 * a * b  
-    return ab if ab >= product else product
+    ab = int(str(a) + str(b))
+    return ab if ab >= 2 * a * b else 2 * a * b
