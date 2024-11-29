@@ -6,8 +6,3 @@ from FIRST_HALF f
     on f.FLAVOR=i.FLAVOR
 group by 1
 order by 2
-
-
-
-
-
