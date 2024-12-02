@@ -28,12 +28,12 @@ def start_game():    #스타트 게임 함수를 선언한다.
         while True:                                    #게임을 계속할건지 묻는 무한루프 시작
             user_input = input("계속 하시겠습니까? (Y/N): ").upper()    #사용자에게 y, n입력 요구하기
             if user_input == 'Y':                      #y를 입력하면 
-                break  # Y이면 게임 계속                   #해당 루프 종료
-            elif user_input == 'N':                     #n을 입력하면
-                print("게임을 종료합니다.")                  #해당문구 프린트
+                break  # Y이면 게임 계속                  #해당 루프 종료
+            elif user_input == 'N':                    #n을 입력하면
+                print("게임을 종료합니다.")                 #해당문구 프린트
                 return      # N이면 게임 종료 와일트루 종료가 아니라 게임 전체 종료라서 리턴사용함.
-            else:                                        #y, n말고 다른 것 입력하면
+            else:                                       #y, n말고 다른 것 입력하면
                 print("잘못된 입력입니다. Y 또는 N을 입력하세요.")    #해당문구 프린트
 
 
-start_game()                                                    #사용자가 y를 입력하면 끝으로 와서 게임시작 함수 호출
+start_game()                                             #사용자가 y를 입력하면 끝으로 와서 게임시작 함수 호출
