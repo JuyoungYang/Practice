@@ -1,39 +1,35 @@
-import random        #랜덤 모듈을 가져온다.
-def start_game():    #스타트 게임 함수를 선언한다.
+import random     #랜덤 모듈 불러오기 
+def start_game(): #게임 시작 함수   
 
-    while True:      # 게임을 계속할지 결정하는 무한루프
-        chosen_number = random.randint(1, 10)    #1과 10을 포함한 숫자 중 하나를 랜덤하게 선택한다.
-        print("=== 숫자 맞추기 게임 ===")    #게임 제목 프린트
-        print(f"1과 10 사이의 숫자를 하나 정했습니다.\n이 숫자는 무엇일까요?")    #게임 설명 프린트, \n을 사용하여 줄바꾸기함.
+    while True:                                 #게임을 그만둘 때까지 무한 반복 시작
+        chosen_number = random.randint(1, 10)   #1과 10 사이의 랜덤한 숫자 선택   
+        print("=== 숫자 맞추기 게임 ===")           #게임 시작 문구 출력
+        print(f"1과 10 사이의 숫자를 하나 정했습니다.\n이 숫자는 무엇일까요?") #게임 설명 출력
 
-        while True:    #입력값을 1~10사이로 제한하는 무한루프
-            try:
-                user_number = int(input("예상 숫자 : "))    #사용자 입력값을 정수로 받는다.
-                if 1 <= user_number <= 10:                #사용자 입력값이 1~10사이라면
-                    break                                 #루프종료
-                else:                                     #1~10사이가 아니라면
-                    print("입력값이 1과 10 사이가 아닙니다. 다시 입력하세요.")    #해당 문구를 프린트하고 앞으로 루프
-            except ValueError:
-                print("유효하지 않은 숫자입니다. 숫자를 입력해주세요.")            #밸류에러일 시 해당 문구를 프린트하고 앞으로 루프
+        while True:                                         #정답이 나올 때까지 무한 반복 시작
+            try:                                            #예외 처리 시작
+                user_number = int(input("예상 숫자 : "))      #사용자 입력 숫자로 받기
+                if not (1 <= user_number <= 10):            #사용자 입력 숫자가 1과 10 사이가 아니면
+                    print("입력값이 1과 10 사이가 아닙니다. 다시 입력하세요.") #해당 메세지 출력   
+                    continue                                 #1과 10 사이가 아니면 다시 입력하기
+                if user_number < chosen_number:              #사용자 입력 숫자가 정답보다 작으면   
+                    print("너무 작습니다. 다시 입력하세요.")        #해당 메세지 출력
+                elif user_number > chosen_number:            #사용자 입력 숫자가 정답보다 크면
+                    print("너무 큽니다. 다시 입력하세요.")          #해당 메세지 출력
+                elif user_number == chosen_number:           #사용자 입력 숫자가 정답과 같으면
+                    print("정답입니다!")                        #해당 메세지 출력
+                    break                                    #정답이 나오면 반복문 종료
+            except ValueError:                               #밸류에러일 때
+                print("유효하지 않은 숫자입니다. 숫자를 입력해주세요.") #해당 메세지 출력   
+        
+        while True:                                            #게임을 계속 할지 말지 묻는 반복문 시작
+            user_input = input("계속 하시겠습니까? (Y/N): ").strip().upper() #사용자에게 받은 입력을 공백 제거 후 대문자로 변환
+            if user_input == 'Y':                              #사용자 입력이 Y이면
+                break                                          #반복문 종료
+            elif user_input == 'N':                            #사용자 입력이 N이면
+                print("게임을 종료합니다.")                        #해당 메세지 출력 후
+                return                                         #게임 종료
+            else:                                              #사용자 입력이 Y와 N이 아니면
+                print("잘못된 입력입니다. Y 또는 N을 입력하세요.")      #해당 메세지 출력
 
-        while user_number != chosen_number:            #사용자입력 값과 정답이 같지 않으면 반복되는 루프
-            if user_number < chosen_number:            #정답보다 사용자입력 값이 작으면
-                print("너무 작습니다. 다시 입력하세요.")      #해당 문구 프린트
-            elif user_number > chosen_number:          #정답보다 사용자입력 값이 크면
-                print("너무 큽니다. 다시 입력하세요.")        #해당 문구 프린트
-            user_number = int(input("예상 숫자 : "))     #새로운 숫자 입력 받기
-
-        print("정답입니다!")                              #정답입니다 출력
-
-        while True:                                    #게임을 계속할건지 묻는 무한루프 시작
-            user_input = input("계속 하시겠습니까? (Y/N): ").upper()    #사용자에게 y, n입력 요구하기
-            if user_input == 'Y':                      #y를 입력하면 
-                break  # Y이면 게임 계속                  #해당 루프 종료
-            elif user_input == 'N':                    #n을 입력하면
-                print("게임을 종료합니다.")                 #해당문구 프린트
-                return                                  #N이면 게임 종료. 와일트루 종료가 아니라 게임 전체 종료라서 리턴사용함.
-            else:                                       #y, n말고 다른 것 입력하면
-                print("잘못된 입력입니다. Y 또는 N을 입력하세요.")    #해당문구 프린트
-
-
-start_game()                                             #사용자가 y를 입력하면 끝으로 와서 게임시작 함수 호출
+start_game()                                                   #Y를 선택하면 루프 탈출 후 시작함수 호출
