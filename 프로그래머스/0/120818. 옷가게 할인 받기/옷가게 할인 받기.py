@@ -6,5 +6,3 @@ def solution(price):
     elif price >= 100000 :
         return int(price*0.95)
     else : return price
-    
-    
