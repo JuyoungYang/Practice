@@ -1,1 +1,4 @@
 내 깃 정리 어디갔찌
+
+git log --oneline --all -gragh
+여기서 HEAD는 내 위치를 나타냄
