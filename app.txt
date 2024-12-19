@@ -1,2 +1,7 @@
-aaaaaaaaaa
-bbbbbbbbbb
+Vim에디터꺼
+git difftool 현재파일 수정사항 시각적으로 보여줌
+다보고 나갈려면 :qa 하면 댐
+
+difftool 할 때 빔꺼 쓰기 싫으면
+git config --global diff.tool vscode
+git config --global difftool.vscode.cmd 'code --wait --diff $LOCAL $REMOTE'
