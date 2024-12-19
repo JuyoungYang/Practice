@@ -19,9 +19,29 @@ git log --oneline --all -gragh
 HEAD -> coupon
 여기서 HEAD는 내 위치를 나타냄
 
+
+git branch 브랜치명
+: 새로운 브랜치를 만들지만 현재 브랜치에 그대로 머무름.
+git switch -c 브랜치명
+: 새로운 브랜치를 만들고 바로 그 브랜치로 이동.
+
+
 merge 하고 싶으면
 1. main/master 브랜치로 다시 이동하고
 2. git merge 브랜치명 입력하면 합쳐짐
+
+rebase&merge하고 싶으면
+1. 새로운 브랜치로 가서
+2. git rebase 중심브랜치명
+
+git switch 새로운브랜치
+git rebase main
+
+git switch main
+git merge 새로운브랜치
+차례로 입력하면 rebase 끝
+브랜치끼리 차이가 너무 많은 경우 rebase하면 충돌이 많이 발생할 수 있음
+
 
 git merge coupon을 하면
 coupon 브랜치의 코드들이 
@@ -40,8 +60,25 @@ git add 파일명
 git commit -m '메세지'
 입력하면 새로운 commit 을 생성해주며 merge conflict 해결 + 브랜치 합치기 완료
 
+
 머지 완료된 브랜치 삭제는
 git branch -d <브랜치명>
 
 머지 안한 브랜치 삭제는
 git branch -D <브랜치명>
+
+
+3-way merge
+브랜치에 각각 신규 commit이 1회 이상 있는 경우 
+merge 명령을 내리면 두 브랜치의 코드를 합쳐서 새로운 commit을 자동으로 생성해주는것
+
+fast-forward merge
+새로운 브랜치에만 commit 이 있고
+기준이 되는 브랜치에는 신규 commit 이 없는 경우
+딱히 합칠게 없어서 그냥 신규브랜치 보고
+"지금부터 니 이름은 main 브랜치여" 하는 것
+"기준이 되는 브랜치에 신규 commit이 없으면" 자동으로 fast-forward merge가 발동
+싫으면 git merge --no-ff 브랜치명 해서 강제로 3-way merge 할 수도 있음
+
+
+
