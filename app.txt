@@ -16,3 +16,8 @@ git commit -m "메세지"
 
 git log --oneline --all -gragh
 여기서 HEAD는 내 위치를 나타냄
+
+git merge coupon
+메인과 쿠폰브랜치 작업물이 다르면 충돌이 생기는데
+conflict(충돌)해결법은 원하는 코드만 남기고
+깃에드, 커밋 하기
