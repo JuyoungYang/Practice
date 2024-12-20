@@ -81,4 +81,5 @@ fast-forward merge
 싫으면 git merge --no-ff 브랜치명 해서 강제로 3-way merge 할 수도 있음
 
 
-
+터미널에서 이그노어 수정하기
+nano .gitignore
