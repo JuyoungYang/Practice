@@ -83,3 +83,7 @@ fast-forward merge
 
 터미널에서 이그노어 수정하기
 nano .gitignore
+
+
+ merge --squash  브랜치에서 만들어놨던 많은 commit 을 다 합쳐서 
+ 하나의 commit으로 main 브랜치에 생성해줌
