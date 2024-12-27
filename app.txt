@@ -85,5 +85,32 @@ fast-forward merge
 nano .gitignore
 
 
- merge --squash  브랜치에서 만들어놨던 많은 commit 을 다 합쳐서 
- 하나의 commit으로 main 브랜치에 생성해줌
+git merge --squash <브랜치 이름> 
+브랜치에서 만들어놨던 많은 commit 을 다 합쳐서 
+하나의 commit으로 main 브랜치에 생성해줌
+
+git log --oneline 입력해보면commit 내역을 한 줄로 이쁘게 보여줌
+
+
+파일 하나를 되돌리려면 git restore
+git restore 파일명
+최근 commit 된 상태로 현재 파일의 수정내역을 되돌림
+
+git restore --source 커밋아이디 파일명
+입력한 파일이 특정 커밋아이디 시점으로 복구
+
+git restore --staged 파일명
+특정 파일을 staging 취소할 수 있음
+
+
+commit을 되돌리려면 git revert 
+
+commit이 3개 있는데 여기서 b 파일이 문제가 많아서
+b 파일을 만든 d874b2b commit을 취소하고 싶어진겁니다. 
+commit 하나를 취소하고 싶으면 git revert 사용하면 됩니다. 
+실은 없애버리는건 아니고 commit 하나를 취소한 commit을 하나 생성해줍니다. 
+
+git revert 커밋아이디
+이거 입력하면 그 커밋아이디에서 일어난 일만 취소해줍니다. 
+실행하면 아마 에디터가 뜰 텐데 맘대로 커밋메세지 수정하고 닫으면 끝
+
