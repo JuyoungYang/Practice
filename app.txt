@@ -130,3 +130,8 @@ git stash clear
 git stash -p 
 전체 말고 일부 코드만 git stash 하고싶으면 이거 씁시다.
 그럼 파일을 훑어주면서 stash 할 지 의견을 물어보는데 y/n 으로 잘 대답하면 됩니다. 
+
+
+
+디제이 앙고
+디져 앙고!
