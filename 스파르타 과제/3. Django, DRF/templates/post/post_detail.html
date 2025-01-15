@@ -1,76 +1,119 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title">{{ post.title }}</h1>
-            <h6 class="card-subtitle mb-2 text-muted">
-                작성자: {{ post.author.username }} | 
-                작성일: {{ post.created_at|date:"Y-m-d H:i" }}
-                {% if post.updated_at != post.created_at %}
-                    | 수정일: {{ post.updated_at|date:"Y-m-d H:i" }}
-                {% endif %}
-            </h6>
-            <p class="card-text mt-4">{{ post.content|linebreaks }}</p>
+<style>
+    .post-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    .post-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 2rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 1rem;
+    }
+    .meta-info {
+        color: #666;
+        font-size: 0.9rem;
+    }
+    .like-button {
+        background-color: white;
+        border: 1px solid #FFB6C1;
+        color: #FFB6C1;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .like-button.active {
+        background-color: #FFB6C1;
+        color: white;
+    }
+    .comment-section {
+        margin-top: 3rem;
+    }
+    .comment-card {
+        border: 1px solid #eee;
+        border-radius: 4px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+</style>
 
-            <!-- 좋아요 버튼 -->
-            {% if user.is_authenticated %}
-                <div class="mt-3">
-                    <button class="btn {% if user in post.likes.all %}btn-danger{% else %}btn-outline-danger{% endif %} like-button" 
-                            data-post-id="{{ post.pk }}">
-                        <i class="fas fa-heart"></i> 좋아요
-                        <span class="like-count">{{ post.total_likes }}</span>
-                    </button>
-                </div>
+<div class="post-container">
+    <div class="post-card">
+        <h1>{{ post.title }}</h1>
+        <div class="meta-info">
+            작성자: {{ post.author.username }} | 
+            작성일: {{ post.created_at|date:"Y-m-d H:i" }}
+            {% if post.updated_at != post.created_at %}
+                | 수정일: {{ post.updated_at|date:"Y-m-d H:i" }}
             {% endif %}
-            
-            <!-- 게시글 수정/삭제 버튼 -->
+        </div>
+
+        <div class="content mt-4">
+            {{ post.content|linebreaks }}
+        </div>
+
+        <!-- 좋아요 버튼 -->
+        {% if user.is_authenticated %}
+            <div class="button-group">
+                <button class="like-button {% if user in post.likes.all %}active{% endif %}" 
+                        data-post-id="{{ post.pk }}">
+                    <i class="fas fa-heart"></i> 좋아요
+                    <span class="like-count">{{ post.total_likes }}</span>
+                </button>
+            </div>
+        {% endif %}
+        
+        <!-- 게시글 관련 버튼 -->
+        <div class="button-group">
             {% if user == post.author %}
-                <div class="mt-3">
-                    <a href="{% url 'post:post_update' post.pk %}" class="btn btn-primary">수정</a>
-                    <a href="{% url 'post:post_delete' post.pk %}" class="btn btn-danger">삭제</a>
-                </div>
+                <a href="{% url 'post:post_update' post.pk %}" class="button button-pink">수정</a>
+                <a href="{% url 'post:post_delete' post.pk %}" class="button button-red">삭제</a>
             {% endif %}
-            
-            <a href="{% url 'post:post_list' %}" class="btn btn-secondary mt-3">목록으로</a>
+            <a href="{% url 'post:post_list' %}" class="button button-grey">목록으로</a>
         </div>
     </div>
 
     <!-- 댓글 섹션 -->
-    <div class="mt-5">
+    <div class="comment-section">
         <h4>댓글 ({{ comments|length }})</h4>
         
         {% if user.is_authenticated %}
             <form method="post" class="mb-4">
                 {% csrf_token %}
                 {{ comment_form.as_p }}
-                <button type="submit" class="btn btn-primary">댓글 작성</button>
+                <button type="submit" class="button button-pink">댓글 작성</button>
             </form>
         {% endif %}
         
         {% for comment in comments %}
-            <div class="card mb-2">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            {{ comment.author.username }} | 
-                            {{ comment.created_at|date:"Y-m-d H:i" }}
-                        </h6>
-                        {% if user == comment.author %}
-                            <div>
-                                <a href="{% url 'post:comment_update' post.pk comment.pk %}" 
-                                   class="btn btn-primary btn-sm">수정</a>
-                                <form method="post" action="{% url 'post:comment_delete' post.pk comment.pk %}" 
-                                      style="display: inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-sm">삭제</button>
-                                </form>
-                            </div>
-                        {% endif %}
+            <div class="comment-card">
+                <div class="d-flex justify-content-between">
+                    <div class="meta-info">
+                        {{ comment.author.username }} | 
+                        {{ comment.created_at|date:"Y-m-d H:i" }}
                     </div>
-                    <p class="card-text">{{ comment.content }}</p>
+                    {% if user == comment.author %}
+                        <div class="button-group">
+                            <a href="{% url 'post:comment_update' post.pk comment.pk %}" 
+                               class="button button-pink">수정</a>
+                            <form method="post" action="{% url 'post:comment_delete' post.pk comment.pk %}" 
+                                  style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="button button-red">삭제</button>
+                            </form>
+                        </div>
+                    {% endif %}
                 </div>
+                <p class="mt-2">{{ comment.content }}</p>
             </div>
         {% empty %}
             <p>아직 댓글이 없습니다.</p>
