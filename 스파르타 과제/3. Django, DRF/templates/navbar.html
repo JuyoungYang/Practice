@@ -4,46 +4,7 @@
         padding: 1rem;
     }
 
-    .nav-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .nav-brand {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1.5rem;
-    }
-
-    .nav-menu {
-        display: flex;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .nav-item {
-        margin-left: 2rem;
-    }
-
-    .nav-link {
-        color: white;
-        text-decoration: none;
-    }
-
-    .nav-link i {
-        margin-right: 0.5rem;
-    }
-
-    @media (max-width: 768px) {
-        .nav-menu {
-            display: none;
-        }
-    }
+    /* 기존 스타일 유지 */
 </style>
 
 <nav>
@@ -54,28 +15,23 @@
         <ul class="nav-menu">
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'post:post_create' %}">
-                        <i class="fas fa-plus"></i>새 글 작성
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user:profile' %}">
+                    <a class="nav-link" href="{% url 'accounts:profile' %}">  
                         <i class="fas fa-user"></i>{{ user.username }}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user:logout' %}">
+                    <a class="nav-link" href="{% url 'accounts:logout' %}">  
                         <i class="fas fa-sign-out-alt"></i>로그아웃
                     </a>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user:login' %}">
+                    <a class="nav-link" href="{% url 'accounts:login' %}">  
                         <i class="fas fa-sign-in-alt"></i>로그인
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user:signup' %}">
+                    <a class="nav-link" href="{% url 'accounts:signup' %}">  
                         <i class="fas fa-user-plus"></i>회원가입
                     </a>
                 </li>
