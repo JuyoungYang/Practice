@@ -13,28 +13,32 @@ def post_list(request):
     """
     게시글 목록 및 검색 기능
     """
-    search_query = request.GET.get("q", "").strip()
+    search_query = request.GET.get("search", "").strip()
     posts = Post.objects.all()
 
-    if search_query:
+    if search_query:  # 검색어가 있을 경우
         posts = posts.filter(
-            Q(title__icontains=search_query) | Q(content__icontains=search_query)
+            Q(title__icontains=search_query)  # 제목에 검색어가 포함된 경우
+            | Q(content__icontains=search_query)  # 내용에 검색어가 포함된 경우
         )
 
     posts = posts.order_by("-created_at")
-    paginator = Paginator(posts, 5)
+    paginator = Paginator(posts, 5)  # 한 페이지당 5개의 게시글
     page_number = request.GET.get("page", 1)
 
     try:
         page_obj = paginator.page(page_number)
-    except (ValueError, EmptyPage):
-        # 유효하지 않은 페이지 번호의 경우 첫 페이지로 설정
+    except:
         page_obj = paginator.page(1)
 
     return render(
         request,
         "post/post_list.html",
-        {"posts": page_obj, "search_query": search_query, "paginator": paginator},
+        {
+            "posts": page_obj,
+            "search_query": search_query,  # 템플릿에서 검색어 유지를 위해 전달
+            "paginator": paginator,
+        },
     )
 
 
