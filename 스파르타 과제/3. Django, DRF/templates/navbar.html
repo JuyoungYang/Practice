@@ -40,21 +40,21 @@
     }
 
     .nav-button {
-        padding: 0.5rem 1rem;
-        border: 2px solid white; /* 테두리 스타일 추가 */
-        border-radius: 4px;
-        color: white;
-        background-color: transparent; /* 기본 배경 투명 */
-        text-decoration: none;
-        font-size: 1rem;              /* 텍스트 크기 추가 */
-        font-weight: bold;            /* 텍스트 굵기 */
-        transition: all 0.3s ease;    /* 부드러운 전환 */
+        padding: 0.5rem 1rem;            /* 버튼 내부 여백 */
+        border: 2px #FFB6C1;      /* 테두리 */
+        border-radius: 8px;             /* 모서리 둥글게 */
+        background-color: #FFB6C1;        /* 배경색 */
+        color: #F37778;                 /* 글자색 */
+        text-decoration: none;          /* 링크 밑줄 제거 */
+        font-size: 1rem;                /* 글자 크기 */
+        font-weight: bold;              /* 글자 굵기 */
+        transition: all 0.3s ease;      /* 상태 변화 부드럽게 */
     }
     
     .nav-button:hover {
-        background-color: #F37778; /* 호버 시 배경색 */
-        color: white;             /* 텍스트 색 반전 */
-        transform: scale(1.05);   /* 살짝 확대 */
+        background-color: #F37778;      /* 호버 시 배경 핑크색 */
+        color: white;                   /* 호버 시 글자 흰색 */
+        transform: scale(1.05);         /* 호버 시 약간 확대 */
     }
     
     .nav-button:active {
@@ -65,7 +65,7 @@
 <nav>
     <div class="nav-container">
         <a class="nav-brand" href="{% url 'post:post_list' %}">
-            <i class="fa-solid fa-hippo"></i> JY's Blog
+            <i class="fa-solid fa-hippo"></i> JY's Blog <i class="fa-solid fa-splotch"></i>
         </a>
         <ul class="nav-menu">
             {% if user.is_authenticated %}
