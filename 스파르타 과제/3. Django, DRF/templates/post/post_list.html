@@ -27,7 +27,12 @@
                 {{ post.title }}
             </a>
             <div class="post-meta">
-                <i class="fas fa-user"></i> {{ post.author.username }} | 
+                {% if post.author.profile_image %}
+                    <img src="{{ post.author.profile_image.url }}" class="profile-avatar" alt="프로필">
+                {% else %}
+                    <i class="fas fa-user"></i>
+                {% endif %}
+                {{ post.author.username }} | 
                 <i class="far fa-clock"></i> {{ post.created_at|date:"Y-m-d H:i" }}
             </div>
             <div class="post-stats">

@@ -49,7 +49,6 @@
         border-radius: 8px;
         text-decoration: none;
         cursor: pointer;
-        transition: all 0.3s ease;
         border: none;
     }
 
@@ -90,7 +89,6 @@
         padding: 0.5rem 1rem;
         border-radius: 8px;
         cursor: pointer;
-        transition: all 0.3s ease;
     }
 
     .like-button:hover,
@@ -105,7 +103,7 @@
         margin-top: 1rem;
     }
 
-    /* 댓글 작성 버튼도 동일한 스타일 적용 */
+    /* 댓글 작성 버튼 */
     button[type="submit"] {
         background-color: #FFE4E8;
         color: #F37778;
@@ -113,7 +111,6 @@
         border-radius: 8px;
         border: none;
         cursor: pointer;
-        transition: all 0.3s ease;
     }
 
     button[type="submit"]:hover {
@@ -153,7 +150,13 @@
     <div class="post-card">
         <h1>{{ post.title }}</h1>
         <div class="meta-info">
-            작성자: {{ post.author.username }} | 
+            작성자: 
+            {% if post.author.profile_image %}
+                <img src="{{ post.author.profile_image.url }}" class="profile-avatar" alt="프로필">
+            {% else %}
+                <i class="fas fa-user"></i>
+            {% endif %}
+            {{ post.author.username }} | 
             작성일: {{ post.created_at|date:"Y-m-d H:i" }}
             {% if post.updated_at != post.created_at %}
                 | 수정일: {{ post.updated_at|date:"Y-m-d H:i" }}
@@ -203,6 +206,11 @@
             <div class="comment-card">
                 <div class="d-flex justify-content-between">
                     <div class="meta-info">
+                        {% if comment.author.profile_image %}
+                            <img src="{{ comment.author.profile_image.url }}" class="profile-avatar" alt="프로필">
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                        {% endif %}
                         {{ comment.author.username }} | 
                         {{ comment.created_at|date:"Y-m-d H:i" }}
                     </div>
