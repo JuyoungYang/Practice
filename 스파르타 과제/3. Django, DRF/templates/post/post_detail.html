@@ -44,6 +44,109 @@
         padding: 1rem;
         margin-bottom: 1rem;
     }
+    .button {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .button-pink {
+        background-color: #FFE4E8;
+        color: #F37778;
+    }
+
+    .button-pink:hover {
+        background-color: #F37778;
+        color: white;
+    }
+
+    .button-red {
+        background-color: #FFE4E8;
+        color: #F37778;
+    }
+
+    .button-red:hover {
+        background-color: #F37778;
+        color: white;
+    }
+
+    .button-grey {
+        background-color: #FFE4E8;
+        color: #F37778;
+    }
+
+    .button-grey:hover {
+        background-color: #F37778;
+        color: white;
+    }
+
+    .like-button {
+        background-color: #FFE4E8;
+        border: none;
+        color: #F37778;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .like-button:hover,
+    .like-button.active {
+        background-color: #F37778;
+        color: white;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    /* 댓글 작성 버튼도 동일한 스타일 적용 */
+    button[type="submit"] {
+        background-color: #FFE4E8;
+        color: #F37778;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #F37778;
+        color: white;
+    }
+
+    .comment-form {
+        margin-bottom: 2rem;
+    }
+    
+    .comment-input-group {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .comment-input-group p {
+        margin: 0;
+        flex: 1;
+    }
+    
+    .comment-input-group textarea {
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 0.5rem;
+    }
+    
+    .comment-input-group button {
+        white-space: nowrap;
+        margin-top: 1.5rem;  /* textarea의 label과 높이를 맞추기 위한 여백 */
+    }
 </style>
 
 <div class="post-container">
@@ -87,10 +190,12 @@
         <h4>댓글 ({{ comments|length }})</h4>
         
         {% if user.is_authenticated %}
-            <form method="post" class="mb-4">
+            <form method="post" class="comment-form">
                 {% csrf_token %}
-                {{ comment_form.as_p }}
-                <button type="submit" class="button button-pink">댓글 작성</button>
+                <div class="comment-input-group">
+                    {{ comment_form.as_p }}
+                    <button type="submit" class="button button-pink">댓글 작성</button>
+                </div>
             </form>
         {% endif %}
         

@@ -9,8 +9,8 @@
             <label for="content" class="form-label">내용</label>
             <textarea class="form-control" id="content" name="content" rows="3">{{ comment.content }}</textarea>
         </div>
-        <button type="submit" class="btn btn-primary">수정</button>
-        <a href="{% url 'post:post_detail' comment.post.pk %}" class="btn btn-secondary">취소</a>
+        <button type="submit" class="comment-button">수정</button>
+        <a href="{% url 'post:post_detail' comment.post.pk %}" class="comment-button">취소</a>
     </form>
 </div>
 {% endblock %}

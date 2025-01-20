@@ -24,7 +24,8 @@
         list-style: none;
         margin: 0;
         padding: 0;
-        gap: 1rem;  /* 버튼 사이 간격 */
+        gap: 0.5rem;  /* 버튼 사이 간격 */
+        align-items: center;
     }
 
     .nav-link {
@@ -49,6 +50,10 @@
         font-size: 1rem;                /* 글자 크기 */
         font-weight: bold;              /* 글자 굵기 */
         transition: all 0.3s ease;      /* 상태 변화 부드럽게 */
+        display: inline-flex;     
+        align-items: center;
+        height: 40px;      /* 고정된 높이 추가 */
+        box-sizing: border-box;  /* 패딩을 높이에 포함 */
     }
     
     .nav-button:hover {
@@ -60,6 +65,17 @@
     .nav-button:active {
         transform: scale(0.95);   /* 클릭 시 살짝 축소 */
     }
+
+    .profile-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        object-fit: cover;
+        vertical-align: middle;
+        margin-right: 8px;
+        position: relative;   
+        top: 1px;  
+    }
 </style>
 
 <nav>
@@ -69,11 +85,16 @@
         </a>
         <ul class="nav-menu">
             {% if user.is_authenticated %}
-                <li>
-                    <a class="nav-button" href="{% url 'accounts:profile' %}">
-                        <i class="fas fa-user"></i> {{ user.username }}
-                    </a>
-                </li>
+            <li>
+                <a class="nav-button" href="{% url 'accounts:profile' %}" style="display: flex; align-items: center;">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" class="profile-avatar" alt="프로필" style="width: 30px; height: 30px; margin-right: 8px;">
+                    {% else %}
+                        <i class="fas fa-user"></i>
+                    {% endif %}
+                    {{ user.username }}
+                </a>
+            </li>
                 <li>
                     <a class="nav-button" href="{% url 'accounts:logout' %}">
                         <i class="fas fa-sign-out-alt"></i> 로그아웃

@@ -169,8 +169,6 @@ main {
     font-weight: 600;
 }
 
-
-/* 게시글 작성 폼 스타일 */
 .post-form-container {
     max-width: 800px;
     margin: 3rem auto;
@@ -244,7 +242,6 @@ main {
     transform: translateY(-1px);
 }
 
-/* 프로필 페이지 스타일 */
 .profile-container {
     max-width: 800px;
     margin: 3rem auto;
@@ -299,6 +296,21 @@ main {
     flex: 1;
 }
 
+.profile-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.nav-button .profile-avatar {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
 .joined-date {
     color: #666;
     font-size: 0.9rem;
@@ -348,7 +360,7 @@ main {
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.post-title {
+.post-list .post-title {
     color: #333;
     text-decoration: none;
     font-weight: 500;
@@ -356,7 +368,7 @@ main {
     margin-bottom: 0.5rem;
 }
 
-.post-meta {
+.post-list .post-meta {
     display: flex;
     gap: 1rem;
     color: #666;
@@ -369,4 +381,58 @@ main {
     padding: 2rem;
     background: #f9f9f9;
     border-radius: 8px;
+}
+
+.comment-button, 
+.button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #FFE4E8;
+    color: #F37778;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    min-width: 80px;
+    text-align: center;
+    display: inline-block;
+}
+
+.comment-button:hover, 
+.button:hover {
+    background-color: #F37778;
+    color: white;
+}
+
+.like-button {
+    background-color: #FFE4E8;
+    color: #F37778;
+    border: none;
+    border-radius: 6px;
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.like-button:hover {
+    background-color: #F37778;
+    color: white;
+}
+
+.comment-submit {
+    padding: 0.4rem 1rem;
+    background-color: #FFE4E8;
+    color: #F37778;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.comment-submit:hover {
+    background-color: #F37778;
+    color: white;
 }
