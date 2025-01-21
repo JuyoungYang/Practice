@@ -1,19 +1,15 @@
 from django.urls import path
-from django.contrib.auth.views import LogoutView, LoginView
+from rest_framework.authtoken.views import obtain_auth_token
 from . import views
 
 app_name = "accounts"
 
 urlpatterns = [
-    path("signup/", views.signup, name="signup"),
-    path(
-        "login/",
-        LoginView.as_view(
-            template_name="accounts/login.html", next_page="post:post_list"
-        ),
-        name="login",
-    ),
-    path("logout/", LogoutView.as_view(next_page="accounts:login"), name="logout"),
-    path("profile/", views.profile, name="profile"),
-    path("profile/update/", views.profile_update, name="profile_update"),
+    # 회원가입
+    path("signup/", views.SignupView.as_view(), name="signup"),
+    # 토큰 기반 로그인
+    path("login/", obtain_auth_token, name="login"),
+    # 프로필 보기/수정
+    path("profile/", views.ProfileView.as_view(), name="profile"),
+    path("profile/update/", views.ProfileUpdateView.as_view(), name="profile_update"),
 ]
