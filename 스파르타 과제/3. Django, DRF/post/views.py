@@ -18,7 +18,7 @@ class PostViewSet(viewsets.ModelViewSet):
         search_query = self.request.query_params.get("search", None)
         if search_query:
             queryset = queryset.filter(
-                Q(title__icontains=search_query) | Q(content__icontains=search_query)
+                Q(titleicontains=search_query) | Q(contenticontains=search_query)
             )
         return queryset.order_by("-created_at")
 

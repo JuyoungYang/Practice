@@ -1,12 +1,14 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import UserSerializer, UserCreateSerializer
 from .models import CustomUser
 
 
 class SignupView(APIView):
+    permission_classes = [AllowAny]  # 클래스 레벨로 이동
+
     def post(self, request):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():

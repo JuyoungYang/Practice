@@ -11,6 +11,12 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ("id", "post", "author", "content", "created_at", "updated_at")
         read_only_fields = ("created_at", "updated_at")
 
+    def create(self, validated_data):
+        # 사용자 정보는 request에서 가져옴
+        user = self.context["request"].user
+        validated_data["author"] = user
+        return super().create(validated_data)
+
 
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
