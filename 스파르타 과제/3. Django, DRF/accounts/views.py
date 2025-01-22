@@ -1,41 +1,71 @@
-from rest_framework import status
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import UserSerializer, UserCreateSerializer
-from .models import CustomUser
+from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth import get_user_model
+from .serializers import (
+    UserSerializer,
+    UserDetailSerializer,
+    RegisterSerializer,
+    CustomTokenObtainPairSerializer,
+    ChangePasswordSerializer,
+)
+
+User = get_user_model()
 
 
-class SignupView(APIView):
-    permission_classes = [AllowAny]  # 클래스 레벨로 이동
+class RegisterView(generics.CreateAPIView):
+    """
+    회원가입 뷰
+    """
 
-    def post(self, request):
-        serializer = UserCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            response_serializer = UserSerializer(user)
-            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = (permissions.AllowAny,)
 
 
-class ProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    커스텀 토큰 발급 뷰
+    """
 
-    def get(self, request):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+    serializer_class = CustomTokenObtainPairSerializer
 
 
-class ProfileUpdateView(APIView):
-    permission_classes = [IsAuthenticated]
+class UserDetailView(generics.RetrieveUpdateAPIView):
+    """
+    사용자 정보 조회/수정 뷰
+    """
 
-    def get(self, request):
-        serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+    serializer_class = UserDetailSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
-    def put(self, request):
-        serializer = UserSerializer(request.user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_object(self):
+        return self.request.user
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    """
+    비밀번호 변경 뷰
+    """
+
+    serializer_class = ChangePasswordSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if not user.check_password(serializer.data.get("old_password")):
+            return Response(
+                {"old_password": ["Wrong password."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user.set_password(serializer.data.get("new_password"))
+        user.save()
+        return Response({"message": "Password updated successfully"})

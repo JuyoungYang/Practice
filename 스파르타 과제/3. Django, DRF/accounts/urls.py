@@ -1,15 +1,15 @@
 from django.urls import path
-from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_simplejwt.views import TokenRefreshView
 from . import views
 
 app_name = "accounts"
 
 urlpatterns = [
-    # 회원가입
-    path("signup/", views.SignupView.as_view(), name="signup"),
-    # 토큰 기반 로그인
-    path("login/", obtain_auth_token, name="login"),
-    # 프로필 보기/수정
-    path("profile/", views.ProfileView.as_view(), name="profile"),
-    path("profile/update/", views.ProfileUpdateView.as_view(), name="profile_update"),
+    path("register/", views.RegisterView.as_view(), name="register"),
+    path("token/", views.CustomTokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("user/", views.UserDetailView.as_view(), name="user_detail"),
+    path(
+        "change-password/", views.ChangePasswordView.as_view(), name="change_password"
+    ),
 ]
