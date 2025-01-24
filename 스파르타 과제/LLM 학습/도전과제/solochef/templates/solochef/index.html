@@ -1,0 +1,62 @@
+{% extends 'solochef/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="text-center mb-4">🍳 혼밥요리사</h1>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="chat-container mb-4">
+            <div class="chat-message bot-message">
+                하이하이~ 혼밥메뉴 알랴줌! 추천 원하면 말하셈
+            </div>
+
+            {% for conversation in conversations %}
+            <div class="chat-message user-message">
+                {{ conversation.user_input }}
+            </div>
+            <div class="chat-message bot-message">
+                {{ conversation.ai_response|linebreaks }}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- 메뉴 추천 요청 폼 -->
+        <form method="post" action="{% url 'solochef:chat' %}" class="mb-3">
+            {% csrf_token %}
+            <div class="input-group">
+                {{ chat_form.message }}
+                <button type="submit" class="btn btn-primary">전송</button>
+            </div>
+        </form>
+
+        {% if menu_response %}
+        <!-- 메뉴 선택 폼 -->
+        <form method="post" action="{% url 'solochef:recipe' %}" class="mb-3">
+            {% csrf_token %}
+            <input type="hidden" name="menu" value="{{ menu_response }}">
+            <div class="input-group">
+                <input type="text" name="choice" class="form-control" placeholder="1-3 중에서 선택해주세요" required>
+                <button type="submit" class="btn btn-primary">선택</button>
+            </div>
+        </form>
+        {% endif %}
+
+        {% if recipe_response %}
+        <!-- 레시피 응답 표시 -->
+        <div class="chat-message bot-message">
+            {{ recipe_response }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
