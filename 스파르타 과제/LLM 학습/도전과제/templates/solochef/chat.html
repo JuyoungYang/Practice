@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="text-center mb-4">🍳 혼밥요리사</h1>
+        
+        <div class="chat-wrapper">
+            <div class="chat-container" id="chatContainer">
+                <div class="chat-message bot-message">
+                    하이하이~ 혼밥메뉴 알랴줌! 추천 원하면 말하셈
+                </div>
+                {% for conversation in conversations reversed %}
+                    <div class="chat-message user-message">
+                        {{ conversation.user_input|linebreaksbr }}
+                    </div>
+                    <div class="chat-message bot-message">
+                        {{ conversation.ai_response|linebreaksbr }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="input-area">
+                <form id="chatForm" class="mb-0">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        {{ chat_form.message }}
+                        <button type="submit" class="btn btn-primary">전송</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

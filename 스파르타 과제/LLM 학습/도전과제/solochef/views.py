@@ -3,24 +3,27 @@ from django.contrib import messages
 from .forms import ChatForm
 from .models import Conversation
 from .chat_service import ChatService
+from django.http import JsonResponse
 
 
 def index(request):
+    """메인 페이지"""
+    return render(request, "solochef/index.html")
+
+
+def chat_view(request):
+    """채팅 페이지"""
     chat_form = ChatForm()
-    # 이전 대화 내역을 가져옵니다
-    conversations = Conversation.objects.all().order_by("timestamp")[:5]
+    conversations = Conversation.objects.order_by("timestamp")[:5]
     return render(
         request,
-        "solochef/index.html",
-        {
-            "chat_form": chat_form,
-            "conversations": conversations,
-            "menu_response": None,  # 초기에는 메뉴 응답이 없습니다
-        },
+        "solochef/chat.html",
+        {"chat_form": chat_form, "conversations": conversations},
     )
 
 
 def chat(request):
+    """채팅 메시지 처리"""
     if request.method == "POST":
         form = ChatForm(request.POST)
         if form.is_valid():
@@ -29,29 +32,23 @@ def chat(request):
 
             try:
                 response = chat_service.today_meal(user_input)
-                # 대화 내용을 저장합니다
                 conversation = Conversation.objects.create(
                     user_input=user_input, ai_response=response
                 )
-                # POST-Redirect-GET 패턴을 사용하여 결과 페이지로 이동합니다
-                return render(
-                    request,
-                    "solochef/index.html",
+                return JsonResponse(
                     {
-                        "chat_form": ChatForm(),
-                        "menu_response": response,
-                        "conversations": Conversation.objects.all().order_by(
-                            "-timestamp"
-                        )[:5],
-                    },
+                        "status": "success",
+                        "response": response,
+                        "conversation_id": conversation.id,
+                    }
                 )
             except Exception as e:
-                messages.error(request, str(e))
-
-    return redirect("solochef:index")
+                return JsonResponse({"status": "error", "message": str(e)})
+    return JsonResponse({"status": "error", "message": "잘못된 요청입니다."})
 
 
 def get_recipe(request):
+    """레시피 처리"""
     if request.method == "POST":
         choice = request.POST.get("choice")
         menu = request.POST.get("menu", "")
@@ -60,22 +57,16 @@ def get_recipe(request):
         try:
             chosen_menu = chat_service.get_menu_choice(menu, choice)
             recipe = chat_service.get_recipe(chosen_menu)
-            # 레시피 요청 내용을 저장합니다
             conversation = Conversation.objects.create(
                 user_input=f"레시피 요청: {chosen_menu}", ai_response=recipe
             )
-            return render(
-                request,
-                "solochef/index.html",
+            return JsonResponse(
                 {
-                    "chat_form": ChatForm(),
-                    "recipe_response": recipe,
-                    "conversations": Conversation.objects.all().order_by("-timestamp")[
-                        :5
-                    ],
-                },
+                    "status": "success",
+                    "recipe": recipe,
+                    "conversation_id": conversation.id,
+                }
             )
         except ValueError as e:
-            messages.error(request, str(e))
-
-    return redirect("solochef:index")
+            return JsonResponse({"status": "error", "message": str(e)})
+    return JsonResponse({"status": "error", "message": "잘못된 요청입니다."})

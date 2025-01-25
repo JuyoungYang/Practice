@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ post.title }}</h2>
+            <p class="text-muted">{{ post.created_at|date:"Y-m-d H:i" }}</p>
+            
+            <h4>재료</h4>
+            <p class="card-text">{{ post.ingredients|linebreaksbr }}</p>
+            
+            <h4>조리 방법</h4>
+            <p class="card-text">{{ post.instructions|linebreaksbr }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
