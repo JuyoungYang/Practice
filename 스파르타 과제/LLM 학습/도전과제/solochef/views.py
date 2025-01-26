@@ -4,15 +4,11 @@ from .forms import ChatForm
 from .models import Conversation
 from .chat_service import ChatService
 from django.http import JsonResponse
+from post.models import Post
 
 
+# solochef/views.py
 def index(request):
-    """메인 페이지"""
-    return render(request, "solochef/index.html")
-
-
-def chat_view(request):
-    """채팅 페이지"""
     chat_form = ChatForm()
     conversations = Conversation.objects.order_by("timestamp")[:5]
     return render(
@@ -40,11 +36,26 @@ def chat(request):
                         "status": "success",
                         "response": response,
                         "conversation_id": conversation.id,
+                        "ask_save": True,  # 저장 여부를 물어보기 위한 플래그 추가
                     }
                 )
             except Exception as e:
                 return JsonResponse({"status": "error", "message": str(e)})
     return JsonResponse({"status": "error", "message": "잘못된 요청입니다."})
+
+
+def save_recipe(request):
+    if request.method == "POST":
+        conversation_id = request.POST.get("conversation_id")
+        conversation = Conversation.objects.get(id=conversation_id)
+
+        Post.objects.create(
+            author=request.user,
+            title=conversation.user_input,
+            ingredients=conversation.ai_response,
+            instructions=conversation.ai_response,
+        )
+        return JsonResponse({"status": "success"})
 
 
 def get_recipe(request):

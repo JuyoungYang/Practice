@@ -1,36 +1,111 @@
+<!-- chat.html -->
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-8 offset-md-2">
-        <h1 class="text-center mb-4">🍳 혼밥요리사</h1>
-        
-        <div class="chat-wrapper">
-            <div class="chat-container" id="chatContainer">
-                <div class="chat-message bot-message">
-                    하이하이~ 혼밥메뉴 알랴줌! 추천 원하면 말하셈
-                </div>
-                {% for conversation in conversations reversed %}
-                    <div class="chat-message user-message">
-                        {{ conversation.user_input|linebreaksbr }}
-                    </div>
-                    <div class="chat-message bot-message">
-                        {{ conversation.ai_response|linebreaksbr }}
-                    </div>
-                {% endfor %}
+<div class="chat-wrapper">
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-message bot-message">
+            하이하이~ 혼밥메뉴 알랴줌! 추천 원하면 말하셈
+        </div>
+        {% for conversation in conversations reversed %}
+            <div class="chat-message user-message">
+                {{ conversation.user_input|linebreaksbr }}
             </div>
+            <div class="chat-message bot-message">
+                {{ conversation.ai_response|linebreaksbr }}
+            </div>
+        {% endfor %}
+    </div>
 
-            <div class="input-area">
-                <form id="chatForm" class="mb-0">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        {{ chat_form.message }}
-                        <button type="submit" class="btn btn-primary">전송</button>
-                    </div>
-                </form>
+    <div class="input-area">
+        <form id="chatForm" class="mb-0">
+            {% csrf_token %}
+            <div class="input-group">
+                {{ chat_form.message }}
+                <button type="submit" class="btn btn-primary">전송</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 저장 확인 모달 -->
+<div class="modal fade" id="saveModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">레시피 저장</h5>
+            </div>
+            <div class="modal-body">
+                레시피 저장하쉴?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">아니</button>
+                <button type="button" class="btn btn-primary" id="saveRecipe">구래</button>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentConversationId = null;
+
+document.getElementById('chatForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const userMessage = formData.get('message');
+    
+    try {
+        const response = await fetch('{% url "solochef:chat" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        });
+        
+        const data = await response.json();
+        if (data.status === 'success') {
+            appendMessage(userMessage, true);
+            appendMessage(data.response, false);
+            
+            if (data.ask_save) {
+                currentConversationId = data.conversation_id;
+                var saveModal = new bootstrap.Modal(document.getElementById('saveModal'));
+                saveModal.show();
+            }
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+    
+    this.reset();
+});
+
+document.getElementById('saveRecipe').addEventListener('click', async function() {
+    if (currentConversationId) {
+        const formData = new FormData();
+        formData.append('conversation_id', currentConversationId);
+        
+        try {
+            const response = await fetch('{% url "solochef:save_recipe" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            });
+            
+            const data = await response.json();
+            if (data.status === 'success') {
+                bootstrap.Modal.getInstance(document.getElementById('saveModal')).hide();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+});
+</script>
 {% endblock %}

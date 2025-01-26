@@ -8,13 +8,36 @@
     <style>
         .sidebar {
             position: fixed;
-            top: 0;
+            top: 56px;
             bottom: 0;
             left: 0;
             z-index: 100;
             padding: 48px 0 0;
             box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
             background-color: #f8f9fa;
+        }
+        
+        main {
+            margin-top: 20px;  /* 네비바와 콘텐츠 사이 여백 */
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    
+        .navbar {
+            height: 56px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    
+        .container-fluid {
+            padding: 76px 20px;
+            background-color: #f8f9fa;
+            min-height: calc(100vh - 56px);
+        }
+
+        .chat-container {
+            margin-top: 20px;  /* 채팅 컨테이너 상단 여백 */
         }
     </style>
 </head>
