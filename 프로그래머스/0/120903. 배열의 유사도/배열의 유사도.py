@@ -1,3 +1,6 @@
 def solution(s1, s2):
-    num = sum(1 for char in s1 if char in s2)
-    return num
+    count = 0
+    for element in s1:
+        if element in s2: 
+            count += 1
+    return count
